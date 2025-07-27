@@ -1435,6 +1435,10 @@ section {
     margin: 0 auto;
   }
 
+  .hero-content {
+    margin-top: 25px;
+  }
+
   .hero-title {
     font-size: 2.5rem;
   }
