@@ -1,4 +1,5 @@
-// DOM Elements
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
 const loadingScreen = document.getElementById('loading-screen');
 const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
@@ -383,7 +384,10 @@ if (loadingProgress) {
     }, 200);
 }
 
-// Console styling for developer mode
-console.log('%c🎮 GAMING PORTFOLIO LOADED 🎮', 'color: #ff0040; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff0040;');
-console.log('%cBharat Singh Chouhan - Full Stack Developer', 'color: #ffffff; font-size: 14px;');
-console.log('%cLevel: 99 | EXP: ∞ | Rank: Expert', 'color: #ff0040; font-size: 12px;');
+// // Console styling for developer mode
+// console.log('%c🎮 GAMING PORTFOLIO LOADED 🎮', 'color: #ff0040; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff0040;');
+// console.log('%cBharat Singh Chouhan - Full Stack Developer', 'color: #ffffff; font-size: 14px;');
+// console.log('%cLevel: 99 | EXP: ∞ | Rank: Expert', 'color: #ff0040; font-size: 12px;');
+
+});
+
