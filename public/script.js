@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+// DOM Elements
 const loadingScreen = document.getElementById('loading-screen');
 const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
@@ -204,41 +203,108 @@ const simulateTerminalOutput = () => {
 
 // Contact Form Handler
 if (contactForm) {
+    // Initialize EmailJS - Replace with your actual credentials
+    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Replace with your EmailJS public key
+    const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID"; // Replace with your EmailJS service ID
+    const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // Replace with your EmailJS template ID
+    
+    // Check if EmailJS credentials are configured
+    const isEmailJSConfigured = EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY" && 
+                               EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID" && 
+                               EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID";
+    
+    if (isEmailJSConfigured) {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+    
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const formData = new FormData(contactForm);
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
         
-        // Simulate form submission
+        // Validate form data
+        if (!name || !email || !message) {
+            const errorLine = document.createElement('div');
+            errorLine.className = 'output-line';
+            errorLine.innerHTML = `
+                <span class="prompt">$</span>
+                <span class="command" style="color: #ff0040;">Error: All fields are required!</span>
+            `;
+            terminalOutput.appendChild(errorLine);
+            return;
+        }
+        
+        // Check if EmailJS is configured
+        if (!isEmailJSConfigured) {
+            const errorLine = document.createElement('div');
+            errorLine.className = 'output-line';
+            errorLine.innerHTML = `
+                <span class="prompt">$</span>
+                <span class="command" style="color: #ff0040;">Error: EmailJS not configured. Please check emailjs-setup.md for instructions.</span>
+            `;
+            terminalOutput.appendChild(errorLine);
+            return;
+        }
+        
         const submitBtn = contactForm.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
         
         submitBtn.innerHTML = '<span>TRANSMITTING...</span>';
         submitBtn.disabled = true;
         
-        setTimeout(() => {
-            submitBtn.innerHTML = '<span>TRANSMISSION COMPLETE</span>';
-            
-            // Add success message to terminal
-            const successLine = document.createElement('div');
-            successLine.className = 'output-line';
-            successLine.innerHTML = `
-                <span class="prompt">$</span>
-                <span class="command" style="color: #00ff00;">Message transmitted successfully!</span>
-            `;
-            terminalOutput.appendChild(successLine);
-            
-            // Reset form
-            contactForm.reset();
-            
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        }, 2000);
+        // Prepare email parameters
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            message: message,
+            to_email: 'kakax07r@gmail.com'
+        };
+        
+        // Send email using EmailJS
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+            .then((response) => {
+                console.log('Email sent successfully:', response);
+                
+                submitBtn.innerHTML = '<span>TRANSMISSION COMPLETE</span>';
+                
+                // Add success message to terminal
+                const successLine = document.createElement('div');
+                successLine.className = 'output-line';
+                successLine.innerHTML = `
+                    <span class="prompt">$</span>
+                    <span class="command" style="color: #00ff00;">Message transmitted successfully to kakax07r@gmail.com!</span>
+                `;
+                terminalOutput.appendChild(successLine);
+                
+                // Reset form
+                contactForm.reset();
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            })
+            .catch((error) => {
+                console.error('Email sending failed:', error);
+                
+                submitBtn.innerHTML = '<span>TRANSMISSION FAILED</span>';
+                
+                // Add error message to terminal
+                const errorLine = document.createElement('div');
+                errorLine.className = 'output-line';
+                errorLine.innerHTML = `
+                    <span class="prompt">$</span>
+                    <span class="command" style="color: #ff0040;">Transmission failed. Please try again.</span>
+                `;
+                terminalOutput.appendChild(errorLine);
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
     });
 }
 
@@ -384,10 +450,7 @@ if (loadingProgress) {
     }, 200);
 }
 
-// // Console styling for developer mode
-// console.log('%c🎮 GAMING PORTFOLIO LOADED 🎮', 'color: #ff0040; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff0040;');
-// console.log('%cBharat Singh Chouhan - Full Stack Developer', 'color: #ffffff; font-size: 14px;');
-// console.log('%cLevel: 99 | EXP: ∞ | Rank: Expert', 'color: #ff0040; font-size: 12px;');
-
-});
-
+// Console styling for developer mode
+console.log('%c🎮 GAMING PORTFOLIO LOADED 🎮', 'color: #ff0040; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff0040;');
+console.log('%cBharat Singh Chouhan - Full Stack Developer', 'color: #ffffff; font-size: 14px;');
+console.log('%cLevel: 99 | EXP: ∞ | Rank: Expert', 'color: #ff0040; font-size: 12px;');
